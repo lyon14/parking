@@ -1,9 +1,14 @@
 import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonRow } from "@ionic/react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { InputErrorMessage } from "../errors/InputErrorMessage";
+import { createUser } from "../../store/users/actions/createUser"
+import { AppDispatch } from "../../store";
 
 export const SignUpForm: React.FC = () => {
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const {
         register,
@@ -12,7 +17,7 @@ export const SignUpForm: React.FC = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            nombre: "",
+            name: "",
             email: "",
             password: "",
             telefono: "",
@@ -21,7 +26,7 @@ export const SignUpForm: React.FC = () => {
 
     const onSubmit = async (data: any) => {
         try {
-            console.log(data);
+            dispatch(createUser(data));
         } catch (error) {
             console.log(error);
         }
@@ -44,12 +49,12 @@ export const SignUpForm: React.FC = () => {
                                     <IonLabel position="floating">nombre:</IonLabel>
                                     <Controller
                                         control={control}
-                                        name="nombre"
+                                        name="name"
                                         render={({ field: { onChange, value } }) => (
                                             <IonInput
                                                 onIonChange={(e) => onChange(e.detail.value)}
                                                 value={value}
-                                                {...register("nombre", {
+                                                {...register("name", {
                                                     required: "Nombre es requerido",
                                                     pattern: {
                                                         value: /^[A-Za-z]*$/i,
@@ -61,7 +66,7 @@ export const SignUpForm: React.FC = () => {
                                         )}
                                     />
                                 </IonItem>
-                                <InputErrorMessage errorMessage={errors.nombre?.message || ""} />
+                                <InputErrorMessage errorMessage={errors.name?.message || ""} />
 
                                 <IonItem>
                                     <IonLabel position="floating">Email:</IonLabel>

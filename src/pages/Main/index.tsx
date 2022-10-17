@@ -1,24 +1,25 @@
-import { IonPage } from "@ionic/react";
+import { IonPage, IonSplitPane } from "@ionic/react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect } from "react-router";
-import { LoginForm } from "../../components/Login/LoginForm";
+import { Menu } from "../../components/menu";
 import { selectIsAuthenticated } from "../../store/users/selectors/SelectIsAuthenticated";
 
-
-export const Login: React.FC = () => {
+export const Main: React.FC = () => {
 
     const isAuthenticated = useSelector(selectIsAuthenticated);
 
     console.log(isAuthenticated);
 
-    if(isAuthenticated) {
-        return <Redirect to="/app" />
+    if(!isAuthenticated) {
+        return <Redirect to="/login" />
     }
 
-    return (
+    return(
         <IonPage>
-            <LoginForm />
+            <IonSplitPane contentId="main">
+                <Menu />
+            </IonSplitPane>    
         </IonPage>
-    );
-};
+    )
+}

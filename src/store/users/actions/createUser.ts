@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { User } from "../../../@types/user";
 
 export const createUser = createAsyncThunk(
-    "users/createUser",
+    "user/createUser",
     async (user: User, { rejectWithValue }) => {
         try {
             let response = await fetch(`${api.baseURL}user/signup`, {

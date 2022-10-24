@@ -1,15 +1,19 @@
-import { IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonPage, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonMenuToggle, IonPage, IonTitle, IonToolbar } from "@ionic/react";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { logout } from "../../store/users/actions/logout";
+import { selectListPages } from "../../store/users/selectors/SelectListPages";
 
 export const Menu: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
-    
+
+    const Pages = useSelector(selectListPages)
+    console.log(Pages);
+
     const onLogout = async () => {
-        try{
+        try {
             await dispatch(logout());
         } catch (error) {
             console.log(error);
@@ -18,28 +22,29 @@ export const Menu: React.FC = () => {
 
     return (
         <>
-            <IonMenu contentId="main-content" type="overlay">
+            <IonMenu contentId="main" type="overlay">
                 <IonHeader>
                     <IonToolbar>
-                        <IonTitle>Menu Content</IonTitle>
+                        <IonTitle>My Parking</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
                     <IonList lines="none">
-                        <IonItem>
-                            <IonLabel>Item 1</IonLabel>
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel>Item 1</IonLabel>
-                        </IonItem>
-                        <IonItem>
-                            <IonLabel>Item 1</IonLabel>
-                        </IonItem>
+                        {Pages.filter(({ menu }) => menu).map((Pages, index) => (
+                            <IonMenuToggle key={index} autoHide={false}>
+                                <IonItem
+                                    routerLink={Pages.url}
+                                >
+                                    <IonIcon slot="start" icon={Pages.icon} />
+                                    <IonLabel>{Pages.title}</IonLabel>
+                                </IonItem>
+                            </IonMenuToggle>
+                        ))}
                     </IonList>
                 </IonContent>
                 <IonFooter>
                     <IonToolbar>
-                        <IonButton onClick={() => onLogout()} color="danger" expand="full" type="submit" style={{paddingLeft:10, paddingRight:10}}>Logout</IonButton>
+                        <IonButton onClick={() => onLogout()} color="danger" expand="full" type="submit" style={{ paddingLeft: 10, paddingRight: 10 }}>Logout</IonButton>
                     </IonToolbar>
                 </IonFooter>
             </IonMenu>

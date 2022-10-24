@@ -46,7 +46,7 @@ export const SignUpForm: React.FC = () => {
                                 onSubmit={handleSubmit(onSubmit)}
                             >
                                 <IonItem>
-                                    <IonLabel position="floating">nombre:</IonLabel>
+                                    <IonLabel position="floating">Nombre:</IonLabel>
                                     <Controller
                                         control={control}
                                         name="name"
@@ -117,7 +117,7 @@ export const SignUpForm: React.FC = () => {
                                 <InputErrorMessage errorMessage={errors.password?.message || ""} />
 
                                 <IonItem>
-                                    <IonLabel position="floating">telefono:</IonLabel>
+                                    <IonLabel position="floating">Teléfono:</IonLabel>
                                     <Controller
                                         control={control}
                                         name="telefono"

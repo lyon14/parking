@@ -13,7 +13,7 @@ export const Login: React.FC = () => {
     console.log(isAuthenticated);
 
     if(isAuthenticated) {
-        return <Redirect to="/app" />
+        return <Redirect to="/app/home" />
     }
 
     return (

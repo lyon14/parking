@@ -10,7 +10,6 @@ export const Menu: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const Pages = useSelector(selectListPages)
-    console.log(Pages);
 
     const onLogout = async () => {
         try {

@@ -11,8 +11,6 @@ export const Main: React.FC = () => {
     const isAuthenticated = useSelector(selectIsAuthenticated);
     const Pages = useSelector(selectListPages);
 
-    console.log(isAuthenticated);
-
     if(!isAuthenticated) {
         return <Redirect to="/login" />
     }

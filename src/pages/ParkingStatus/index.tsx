@@ -1,6 +1,33 @@
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonGrid, IonRow, IonLabel, IonCard, IonList, IonItem, IonCol, IonInput } from "@ionic/react"
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
+import { initLocationState } from "../../store/locacion";
+import { listLocation } from "../../store/locacion/actions/listLocation";
+import { SelectListLocacion } from "../../store/locacion/selectors/SelectListLocation";
 
 export const ParkingStatus: React.FC = () => {
+    
+    const dispatch = useDispatch<AppDispatch>();
+    useEffect(() => {
+        dispatch(initLocationState())
+        dispatch(listLocation());
+        
+    }, [dispatch]);
+
+    const ListaLocaciones = useSelector(SelectListLocacion);
+
+    const [results, setResults]= useState(ListaLocaciones);
+
+    const handleSearch = (e: any) => {
+        const query = e.target.value.toLowerCase();
+        const filtered = ListaLocaciones?.filter((item: any) => {
+            return item.title.toLowerCase().includes(query);
+        });
+        setResults(filtered);
+    } 
+
+
     return (
         <IonPage id="main-content">
             <IonHeader>
@@ -23,9 +50,8 @@ export const ParkingStatus: React.FC = () => {
                                     <IonCard style={{ borderRadius: 10, width: '100%' }}>
                                         <IonItem>
                                             <IonLabel position="floating">Locacion:</IonLabel>
-                                            <IonInput type="text" placeholder="Mall Plaza Oeste" color="tertiary" />
+                                            <IonInput debounce={500} onIonChange={(ev) => handleSearch(ev)} type="text" placeholder="Mall Plaza Oeste" color="tertiary" />
                                         </IonItem>
-
                                     </IonCard>
                                 </IonRow>
                                 <IonRow class="ion-justify-content-center">
@@ -55,39 +81,25 @@ export const ParkingStatus: React.FC = () => {
                                                 <IonLabel>Estado:</IonLabel>
                                             </IonCol>
                                         </IonItem>
-                                        <IonItem>
-                                            <IonCol size="4">
-                                                <IonLabel>Mall Plaza Oeste</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="4">
-                                                <IonLabel>523/2500</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="4">
-                                                <IonCard style={{ width: 15, height: 15, background: 'var(--ion-color-success-shade)', borderRadius: 50 }}></IonCard>
-                                            </IonCol>
-                                        </IonItem>
-                                        <IonItem>
-                                            <IonCol size="4">
-                                                <IonLabel>Mall Plaza Vespucio</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="4">
-                                                <IonLabel>3000/3500</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="4">
-                                                <IonCard style={{ width: 15, height: 15, background: 'var(--ion-color-danger)', borderRadius: 50 }}></IonCard>
-                                            </IonCol>
-                                        </IonItem>
-                                        <IonItem>
-                                            <IonCol size="4">
-                                                <IonLabel>Mall Plaza Las Condes</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="4">
-                                                <IonLabel>1233/3500</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="4">
-                                                <IonCard style={{ width: 15, height: 15, background: 'var(--ion-color-warning)', borderRadius: 50 }}></IonCard>
-                                            </IonCol>
-                                        </IonItem>
+                                        {results?.map((locacion, index) => (
+                                            <IonItem key={index}>
+                                                <IonCol size="4">
+                                                    <IonLabel>{locacion.title}</IonLabel>
+                                                </IonCol>
+                                                <IonCol size="4">
+                                                    <IonLabel>{locacion.used}/{locacion.total}</IonLabel>
+                                                </IonCol>
+                                                <IonCol size="4">
+                                                    <IonCard style={{ 
+                                                        width: 15, 
+                                                        height: 15, 
+                                                        background: locacion.used < locacion.total * 0.3 ? 'var(--ion-color-success-shade)' : locacion.used < locacion.total * 0.7 ? 'var(--ion-color-warning)' : 'var(--ion-color-danger)', 
+                                                        borderRadius: 50 
+                                                        }}>
+                                                    </IonCard>
+                                                </IonCol>
+                                            </IonItem>
+                                        ))}
                                     </IonList>
                                 </IonRow>
                             </IonCard>

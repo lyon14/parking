@@ -12,7 +12,6 @@ export const ParkingStatus: React.FC = () => {
     useEffect(() => {
         dispatch(initLocationState())
         dispatch(listLocation());
-        
     }, [dispatch]);
 
     const ListaLocaciones = useSelector(SelectListLocacion);

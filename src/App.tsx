@@ -26,6 +26,7 @@ import { Main } from './pages/Main';
 
 /* Theme variables */
 import './theme/variables.css';
+import './theme/styles.css';
 
 setupIonicReact();
 

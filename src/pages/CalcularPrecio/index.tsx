@@ -1,9 +1,56 @@
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonButton, IonCard, IonGrid, IonIcon, IonInput, IonItem, IonLabel, IonRow, IonSelect, IonSelectOption, IonCol } from "@ionic/react";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store";
+import { initLocationState } from "../../store/locacion";
+import { listLocation } from "../../store/locacion/actions/listLocation";
+import { SelectListLocacion } from "../../store/locacion/selectors/SelectListLocation";
 
 export const CalcularPrecio: React.FC = () => {
 
-    const minutos = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60];
-    const horas = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24];
+    const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(initLocationState())
+        dispatch(listLocation());
+    }, [dispatch]);
+
+    const ListaLocaciones = useSelector(SelectListLocacion);
+
+    const [results, setResults]= useState(ListaLocaciones);
+
+    //calcular precio
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            locacion: '',
+            tiempo: '',
+        },
+    });
+
+    const onSubmit = async (data: any) => {
+        const tiempo = data.tiempo.split(":");
+        const hora = parseInt(tiempo[0]);
+        const minuto = parseInt(tiempo[1]);
+        const idLocacion = data.locacion;
+        const tarifa = ListaLocaciones?.find((locacion) => locacion.id === idLocacion)?.tarifa;
+        const total = Math.round((hora * tarifa) + (minuto * (tarifa / 60)));
+        if(minuto > 30 && hora == 0){
+            setPrecio(total);
+        }else if (hora != 0){
+            setPrecio(total);
+        }else{
+            setPrecio(0);
+        }
+        
+    };
+
+    const [precio, setPrecio] = useState(0);
 
     return (
         <IonPage id="main-content">
@@ -23,47 +70,48 @@ export const CalcularPrecio: React.FC = () => {
                                 <IonRow class="ion-justify-content-center ion-padding">
                                     <IonLabel style={{ fontSize: 25, color: '#000', fontWeight: 600 }}>Calcular Precio</IonLabel>
                                 </IonRow>
-                                <IonRow class="ion-justify-content-center">
-                                    <IonCard style={{width:'100%'}}>
-                                        <IonItem>
-                                            <IonLabel position="floating">Seleccione Locacion:</IonLabel>
-                                            <IonSelect placeholder="Locacion">
-                                                <IonSelectOption value="1">Locacion 1</IonSelectOption>
-                                                <IonSelectOption value="2">Locacion 2</IonSelectOption>
-                                                <IonSelectOption value="3">Locacion 3</IonSelectOption>
-                                            </IonSelect>
-                                        </IonItem>
-                                    </IonCard>
+                                <IonRow class="ion-justify-content-center ion-padding">
+                                    <IonLabel style={{ fontSize: 25, color: '#000', fontWeight: 600 }}>Precio a pagar:$ {precio}</IonLabel>
                                 </IonRow>
-                                <IonRow class="ion-justify-content-center">
-                                    <IonCol size="6">
-                                        <IonCard>
+                                <form
+                                    onSubmit={handleSubmit(onSubmit)}
+                                >
+                                    <IonRow class="ion-justify-content-center">
+                                        <IonCard style={{width:'100%'}}>
                                             <IonItem>
-                                                <IonLabel position="floating">Hora:</IonLabel>
-                                                <IonSelect placeholder="Hora">
-                                                    {horas.map((hora, index) => (
-                                                        <IonSelectOption key={index} value={hora}>{hora}</IonSelectOption>
-                                                    ))}
-                                                </IonSelect>
+                                                <IonLabel position="floating">Seleccione Locacion:</IonLabel>
+                                                <Controller
+                                                    control={control}
+                                                    name="locacion"
+                                                    render={({ field: { onChange, value }}) => (
+                                                        <IonSelect onIonChange={(e) => onChange(e.detail.value)} value={value} placeholder="Locacion">
+                                                            {results?.map((locacion, index) => (
+                                                                <IonSelectOption key={index} value={locacion.id} >{locacion.title}</IonSelectOption>
+                                                            ))}
+                                                        </IonSelect>
+                                                    )}
+                                                />
+
                                             </IonItem>
                                         </IonCard>
-                                    </IonCol>
-                                    <IonCol size="6">
-                                        <IonCard>
+                                    </IonRow>
+                                    <IonRow class="ion-justify-content-center">
+                                        <IonCard style={{width:'100%'}}>
                                             <IonItem>
-                                                <IonLabel position="floating">Minutos:</IonLabel>
-                                                <IonSelect placeholder="Minutos">
-                                                    {minutos.map((minuto, index) => (
-                                                        <IonSelectOption key={index} value={minuto}>{minuto}</IonSelectOption>
-                                                    ))}
-                                                </IonSelect>
+                                                <Controller
+                                                    control={control}
+                                                    name="tiempo"
+                                                    render={({ field: { onChange, value } }) => (
+                                                        <IonInput type="time" onIonChange={(e) => onChange(e.detail.value)} value={value}></IonInput>
+                                                    )}
+                                                />
                                             </IonItem>
                                         </IonCard>
-                                    </IonCol>
-                                </IonRow>
-                                <IonRow class="ion-justify-content-center">
-                                    <IonButton>Calcular</IonButton>
-                                </IonRow>
+                                    </IonRow>
+                                    <IonRow class="ion-justify-content-center">
+                                        <IonButton type="submit">Calcular</IonButton>
+                                    </IonRow>
+                                </form>
                             </IonGrid>
                         </IonCard>
                     </IonRow>

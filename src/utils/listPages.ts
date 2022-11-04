@@ -6,11 +6,8 @@ import {
     statsChartOutline,
   } from "ionicons/icons";
 import { listPage } from "../@types/listPage";
-import { CalcularPrecio } from "../pages/CalcularPrecio";
 import { Home } from "../pages/home";
-import { PayParking } from "../pages/PayParking";
-import { ParkingStatus } from "../pages/ParkingStatus";
-import { Tarifas } from "../pages/Tarifas";
+import { Inventario } from "../pages/Inventario";
 
 export const listPages: listPage[] = [
     {
@@ -21,31 +18,11 @@ export const listPages: listPage[] = [
         icon: homeOutline,
     },
     {
-        title: "Pay Parking",
-        url: "/app/pay-parking",
-        component: PayParking,
+        title: "Inventario",
+        url: "/app/inventario",
+        component: Inventario,
         menu: true,
-        icon: cardOutline,
+        icon: homeOutline,
     },
-    {
-        title: "Calcular Precio",
-        url: "/app/calcular-precio",
-        component: CalcularPrecio,
-        menu: true,
-        icon: cashOutline,
-    },
-    {
-        title: "Estado del Parking",
-        url: "/app/parking-status",
-        component: ParkingStatus,
-        menu: true,
-        icon: statsChartOutline,
-    },
-    {
-        title: "Tarifas",
-        url: "/app/tarifas",
-        component: Tarifas,
-        menu: true,
-        icon: cellularOutline,
-    }
+
 ];

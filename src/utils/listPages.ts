@@ -7,8 +7,12 @@ import {
     statsChartOutline,
   } from "ionicons/icons";
 import { listPage } from "../@types/listPage";
+import { CalcularPrecio } from "../pages/CalcularPrecio";
 import { Home } from "../pages/home";
-import { Inventario } from "../pages/Inventario";
+import { PayParking } from "../pages/PayParking";
+import { ParkingStatus } from "../pages/ParkingStatus";
+import { Tarifas } from "../pages/Tarifas";
+import { PagarParking } from "../pages/PayParking/components/PagarParking";
 
 export const listPages: listPage[] = [
     {
@@ -19,11 +23,38 @@ export const listPages: listPage[] = [
         icon: homeOutline,
     },
     {
-        title: "Inventario",
-        url: "/app/inventario",
-        component: Inventario,
+        title: "Pay Parking",
+        url: "/app/pay-parking",
+        component: PayParking,
         menu: true,
         icon: appsOutline,
     },
-
+    {
+        title: "Calcular Precio",
+        url: "/app/calcular-precio",
+        component: CalcularPrecio,
+        menu: true,
+        icon: cashOutline,
+    },
+    {
+        title: "Estado del Parking",
+        url: "/app/parking-status",
+        component: ParkingStatus,
+        menu: true,
+        icon: statsChartOutline,
+    },
+    {
+        title: "Tarifas",
+        url: "/app/tarifas",
+        component: Tarifas,
+        menu: true,
+        icon: cellularOutline,
+    },
+    {
+        title: "pagar",
+        url: "/app/pay-parking/activo",
+        component: PagarParking,
+        menu: false,
+        icon: cardOutline,
+    }
 ];

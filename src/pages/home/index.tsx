@@ -1,4 +1,4 @@
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonGrid, IonLabel, IonRow, IonCard, IonList, IonItem, IonCol } from "@ionic/react"
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonGrid, IonLabel, IonRow, IonCard, IonList, IonItem, IonCol, isPlatform, IonText } from "@ionic/react"
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
@@ -21,6 +21,11 @@ export const Home: React.FC = () => {
 
     const [results, setResults]= useState(ListaVentas);
 
+    const isDesktop = isPlatform('desktop');
+
+    const styles = {
+        sideText: isDesktop ? { fontSize: '15px' } : { fontSize: '13px' },
+    };
     
     return (
         <IonPage id="main-content">
@@ -59,13 +64,13 @@ export const Home: React.FC = () => {
                                         {results?.map((locacion, index) => (
                                             <IonItem key={index}>
                                                 <IonCol size="4">
-                                                    <IonLabel>{(new Date()).toLocaleDateString('es-cl', locacion.createdAt)}</IonLabel>
+                                                    <IonText style={styles.sideText}>{(new Date()).toLocaleDateString('es-cl', locacion.createdAt)}</IonText>
                                                 </IonCol>
                                                 <IonCol size="4">
-                                                    <IonLabel>{locacion.patente}</IonLabel>
+                                                    <IonText style={styles.sideText}>{locacion.patente}</IonText>
                                                 </IonCol>
                                                 <IonCol size="4">
-                                                    <IonLabel>$ {locacion.pago}</IonLabel>
+                                                    <IonText style={styles.sideText}>$ {locacion.pago}</IonText>
                                                 </IonCol>
                                             </IonItem>
                                         ))}

@@ -1,4 +1,5 @@
 import {
+    appsOutline,
     cardOutline,
     cashOutline,
     cellularOutline,
@@ -22,7 +23,7 @@ export const listPages: listPage[] = [
         url: "/app/inventario",
         component: Inventario,
         menu: true,
-        icon: homeOutline,
+        icon: appsOutline,
     },
 
 ];

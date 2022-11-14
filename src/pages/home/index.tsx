@@ -3,13 +3,24 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
 import { selectUser } from "../../store/users/selectors/SelectUser"
-
+import { listVentaId } from "../../store/venta/actions/listVentaId";
+import { initVentaState } from "../../store/venta";
+import { SelectListVentaId } from "../../store/venta/selector/SelectListVentaId";
 
 export const Home: React.FC = () => {
 
     const dispatch = useDispatch<AppDispatch>();
     const user = useSelector(selectUser);
     
+    useEffect(() => {
+        dispatch(initVentaState());
+        dispatch(listVentaId(user?.id));
+    }, [dispatch, user]);
+
+    const ListaVentas = useSelector(SelectListVentaId);
+
+    const [results, setResults]= useState(ListaVentas);
+
     
     return (
         <IonPage id="main-content">
@@ -45,6 +56,19 @@ export const Home: React.FC = () => {
                                                 <IonLabel>Valor:</IonLabel>
                                             </IonCol>
                                         </IonItem>
+                                        {results?.map((locacion, index) => (
+                                            <IonItem key={index}>
+                                                <IonCol size="4">
+                                                    <IonLabel>{(new Date()).toLocaleDateString('es-cl', locacion.createdAt)}</IonLabel>
+                                                </IonCol>
+                                                <IonCol size="4">
+                                                    <IonLabel>{locacion.patente}</IonLabel>
+                                                </IonCol>
+                                                <IonCol size="4">
+                                                    <IonLabel>$ {locacion.pago}</IonLabel>
+                                                </IonCol>
+                                            </IonItem>
+                                        ))}
                                     </IonList>
                                 </IonRow>
                             </IonCard>

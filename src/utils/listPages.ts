@@ -12,6 +12,7 @@ import { Home } from "../pages/home";
 import { PayParking } from "../pages/PayParking";
 import { ParkingStatus } from "../pages/ParkingStatus";
 import { Tarifas } from "../pages/Tarifas";
+import { PagarParking } from "../pages/PayParking/components/PagarParking";
 
 export const listPages: listPage[] = [
     {
@@ -48,5 +49,12 @@ export const listPages: listPage[] = [
         component: Tarifas,
         menu: true,
         icon: cellularOutline,
+    },
+    {
+        title: "pagar",
+        url: "/app/pay-parking/activo",
+        component: PagarParking,
+        menu: false,
+        icon: cardOutline,
     }
 ];
